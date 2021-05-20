@@ -10,6 +10,7 @@ toc_footers:
 
 includes:
   - errors
+  - sequences
 
 search: true
 
