@@ -55,8 +55,8 @@ Each entry has a value built from the code properties, and it's linked to other 
 
 ```shell
 curl --request POST "https://api.invopop.dev/sequence/:owner_id/code" \
-  -H "Authorization: Bearer your.api.key"
-  -H "Content-Type: application/json"
+  -H "Authorization: Bearer your.api.key" \
+  -H "Content-Type: application/json" \
   -d '{
         "id":"175ec7e5-8c14-46fd-90ff-ccb37d71550c",
         "name":"Some series",
@@ -271,8 +271,8 @@ owner_id     | path    | UUID of the company that created the codes
 
 ```shell
 curl --request POST "https://api.invopop.dev/sequence/:owner_id/code/:code_id/entry" \
-  -H "Authorization: Bearer your.api.key"
-  -H "Content-Type: application/json"
+  -H "Authorization: Bearer your.api.key" \
+  -H "Content-Type: application/json" \
   -d '{
         "id": "175ec7e5-8c14-46fd-90ff-ccb37d71550c",
         "meta": {
