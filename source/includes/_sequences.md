@@ -357,7 +357,7 @@ meta         | body    | Metadata object
 ## Retrieve entry for a code
 
 ```shell
-curl "https://api.invopop.dev/sequence/:owner_id/code/:code_id/entries" \
+curl "https://api.invopop.dev/sequence/:owner_id/code/:code_id/entry" \
   -H "Authorization: Bearer your.api.key"
 ```
 
