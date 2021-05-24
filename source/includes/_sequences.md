@@ -32,8 +32,6 @@ leading zeros.
 ```json
 {
     "id": "550d89db-2b53-476c-a011-f796e196b053",
-    "code_id": "d4cfb49f-035b-46f0-b7b4-ec733aee2d00",
-    "idx": 186,
     "value": "XX0000186Y",
     "prev_id": "..."
 }
@@ -44,8 +42,6 @@ Each entry has a value built from the code properties, and it's linked to other 
 ```json
 {
     "id": "2a8ece9f-7590-4e8b-a4f5-82d1d0ee16f6",
-    "code_id": "d4cfb49f-035b-46f0-b7b4-ec733aee2d00",
-    "idx": 187,
     "value": "XX0000187Y",
     "prev_id": "550d89db-2b53-476c-a011-f796e196b053"
 }
@@ -290,8 +286,6 @@ import (
 
 type Entry struct {
 	ID     string            `json:"id"`
-	CodeID string            `json:"code_id"`
-	Idx    int64             `json:"idx"`
 	Value  string            `json:"value"`
 	Meta   map[string]string `json:"meta,omitempty"`
 	PrevID string            `json:"prev_id,omitempty"`
@@ -329,8 +323,6 @@ decodingErr := json.NewDecoder(res.Body).decode(&entry)
 ```json
 {
     "id": "175ec7e5-8c14-46fd-90ff-ccb37d71550c",
-    "code_id": "...",
-    "idx": 1,
     "value": "XX0000001Y",
     "meta": {
         "key": "value"
@@ -370,8 +362,6 @@ import (
 
 type Entry struct {
 	ID     string            `json:"id"`
-	CodeID string            `json:"code_id"`
-	Idx    int64             `json:"idx"`
 	Value  string            `json:"value"`
 	Meta   map[string]string `json:"meta,omitempty"`
 	PrevID string            `json:"prev_id,omitempty"`
@@ -395,8 +385,6 @@ decodingErr := json.NewDecoder(res.Body).decode(&entry)
 ```json
 {
     "id": "175ec7e5-8c14-46fd-90ff-ccb37d71550c",
-    "code_id": "...",
-    "idx": 1,
     "value": "XX0000001Y",
     "meta": {
         "key": "value"
@@ -435,8 +423,6 @@ import (
 
 type Entry struct {
 	ID     string            `json:"id"`
-	CodeID string            `json:"code_id"`
-	Idx    int64             `json:"idx"`
 	Value  string            `json:"value"`
 	Meta   map[string]string `json:"meta,omitempty"`
 	PrevID string            `json:"prev_id,omitempty"`
@@ -466,8 +452,6 @@ decodingErr := json.NewDecoder(res.Body).decode(&es)
     "entries": [
         {
             "id": "175ec7e5-8c14-46fd-90ff-ccb37d71550c",
-            "code_id": "...",
-            "idx": 1,
             "value": "XX0000001Y",
             "meta": {
                 "key": "value"
