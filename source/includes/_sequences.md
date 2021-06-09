@@ -329,7 +329,7 @@ import (
 codeID := "fb3ad823-65fe-4a15-beff-7dfb186c7b29"
 client := sequence.New("https://api.invopop.dev", "<API_KEY>")
 
-entry, err := client.FetchEntryCollection(codeID)
+entryCollection, err := client.FetchEntryCollection(codeID)
 if err != nil {
     // Deal with possible client error here...
 }
