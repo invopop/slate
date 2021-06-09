@@ -50,11 +50,11 @@ Each entry has a value built from the code properties, and it's linked to other 
 ## Create a code
 
 ```shell
-curl --request POST "https://api.invopop.dev/sequence/:owner_id/code" \
-  -H "Authorization: Bearer your.api.key" \
+curl --request POST "https://api.invopop.dev/sequence/code" \
+  -H "Authorization: Bearer <API_KEY>" \
   -H "Content-Type: application/json" \
   -d '{
-        "id":"175ec7e5-8c14-46fd-90ff-ccb37d71550c",
+        "id":"fb3ad823-65fe-4a15-beff-7dfb186c7b29",
         "name":"Some series",
         "prefix": "XX",
         "suffix": "Y",
@@ -64,52 +64,30 @@ curl --request POST "https://api.invopop.dev/sequence/:owner_id/code" \
 
 ```go
 import (
-    "bytes"
-    "encoding/json"
-    "net/http"
+	sequence "github.com/invopop/client/sequence"
 )
 
-type Code struct {
-    ID      string `json:"id"`
-    Name    string `json:"name"`
-    Preffix string `json:"preffix"`
-    Suffix  string `json:"suffix"`
-    Padding int    `json:"padding"`
-}
-
-newCode := Code{
-    ID: "175ec7e5-8c14-46fd-90ff-ccb37d71550c"
+newCode := &sequence.CodeParameters{
+    ID: "fb3ad823-65fe-4a15-beff-7dfb186c7b29"
     Name: "Some series",
     Preffix: "XX",
     Suffix: "Y",
     Padding: 7
 }
-newCodeBytes, encodingError := json.Marshall(newCode)
-if encodingError != nil {
-    // Deal with possible encoding errors
-}
 
-httpClient := &http.Client{}
-data := bytes.NewBuffer(newCodeBytes)
-req, _ := http.NewRequest("POST", "https://api.invopop.dev/sequence/:owner_id/code", data)
-req.Header.Set("Authorization", "Bearer your.api.token")
-req.Header.Set("Content-Type", "application/json")
+client := sequence.New("https://api.invopop.dev", "<API_KEY>")
 
-res, err := client.Do(req)
+code, err := client.CreateCode(newCode)
 if err != nil {
-    // Deal with possible network errors here...
+    // Deal with possible client error here...
 }
-
-
-var code Code
-decodingErr := json.NewDecoder(res.Body).decode(&code)
 ```
 
 > Response
 
 ```json
 {
-    "id": "d4cfb49f-035b-46f0-b7b4-ec733aee2d00",
+    "id": "fb3ad823-65fe-4a15-beff-7dfb186c7b29",
     "name": "Some series",
     "prefix": "XX",
     "padding": 7,
@@ -117,18 +95,16 @@ decodingErr := json.NewDecoder(res.Body).decode(&code)
 }
 ```
 
-
 Creates a new code, that will define the specification for a new sequence.
 
 ### HTTP Request
 
-`POST /sequence/:owner_id/code`
+`POST /sequence/code`
 
 ### Parameters
 
 Parameter    | Type    | Description
 ------------ | ------- | -----------
-owner_id     | path    | UUID of the company that creates the code
 id           | body    | UUID that will identify the code
 name         | body    | Descriptive name of the code
 prefix       | body    | Sequence of characters that will preffix every entry of the code
@@ -138,43 +114,29 @@ padding      | body    | Max number of digits the code entries will have (they w
 ## Retrieve a code
 
 ```shell
-curl "https://api.invopop.dev/sequence/:owner_id/code/:code_id" \
-  -H "Authorization: Bearer your.api.key"
+curl "https://api.invopop.dev/sequence/code/:code_id" \
+  -H "Authorization: Bearer <API_KEY>"
 ```
 
 ```go
 import (
-    "bytes"
-    "encoding/json"
-    "net/http"
+	sequence "github.com/invopop/client/sequence"
 )
 
-type Code struct {
-    ID      string `json:"id"`
-    Name    string `json:"name"`
-    Preffix string `json:"preffix"`
-    Suffix  string `json:"suffix"`
-    Padding int    `json:"padding"`
-}
+codeID := "fb3ad823-65fe-4a15-beff-7dfb186c7b29"
+client := sequence.New("https://api.invopop.dev", "<API_KEY>")
 
-httpClient := &http.Client{}
-req, _ := http.NewRequest("GET", "https://api.invopop.dev/sequence/:owner_id/code/:code_id", nil)
-req.Header.Set("Authorization", "Bearer your.api.token")
-
-res, err := client.Do(req)
+code, err := client.FetchCode(codeID)
 if err != nil {
-    // Deal with possible network errors here...
+    // Deal with possible client error here...
 }
-
-var code Code
-decodingErr := json.NewDecoder(res.Body).decode(&code)
 ```
 
 > Response
 
 ```json
 {
-    "id": "d4cfb49f-035b-46f0-b7b4-ec733aee2d00",
+    "id": "fb3ad823-65fe-4a15-beff-7dfb186c7b29",
     "name": "Some series",
     "prefix": "XX",
     "padding": 7,
@@ -186,52 +148,32 @@ Retrieves a specific code object using the given UUID
 
 ### HTTP Request
 
-`GET /sequence/:owner_id/code/:code_id`
+`GET /sequence/code/:code_id`
 
 ### Parameters
 
 Parameter    | Type    | Description
 ------------ | ------- | -----------
-owner_id     | path    | Id of the company that created the code
 code_id      | path    | UUID that identifies the code
 
 ## List all codes
 
 ```shell
-curl "https://api.invopop.dev/sequence/:owner_id/codes" \
-  -H "Authorization: Bearer your.api.key"
+curl "https://api.invopop.dev/sequence/codes" \
+  -H "Authorization: Bearer <API_KEY>"
 ```
 
 ```go
 import (
-    "bytes"
-    "encoding/json"
-    "net/http"
+	sequence "github.com/invopop/client/sequence"
 )
 
-type Code struct {
-    ID      string `json:"id"`
-    Name    string `json:"name"`
-    Preffix string `json:"preffix"`
-    Suffix  string `json:"suffix"`
-    Padding int    `json:"padding"`
-}
+client := sequence.New("https://api.invopop.dev", "<API_KEY>")
 
-type CodeCollection struct {
-    Codes []*Code `json:"codes"`
-}
-
-httpClient := &http.Client{}
-req, _ := http.NewRequest("GET", "https://api.invopop.dev/sequence/:owner_id/codes", nil)
-req.Header.Set("Authorization", "Bearer your.api.token")
-
-res, err := client.Do(req)
+codeCollection, err := client.FetchCodeCollection()
 if err != nil {
-    // Deal with possible network errors here...
+    // Deal with possible client error here...
 }
-
-var cs CodeCollection
-decodingErr := json.NewDecoder(res.Body).decode(&cs)
 ```
 
 > Response
@@ -240,7 +182,7 @@ decodingErr := json.NewDecoder(res.Body).decode(&cs)
 {
     "codes": [
         {
-            "id": "d4cfb49f-035b-46f0-b7b4-ec733aee2d00",
+            "id": "fb3ad823-65fe-4a15-beff-7dfb186c7b29",
             "name": "Some series",
             "prefix": "XX",
             "padding": 7,
@@ -255,19 +197,19 @@ Retrieves all the code objects belonging to the owner.
 
 ### HTTP Request
 
-`GET /sequence/:owner_id/codes`
+`GET /sequence/codes`
 
 ### Parameters
 
 Parameter    | Type    | Description
 ------------ | ------- | -----------
-owner_id     | path    | UUID of the company that created the codes
+\-           | \-      | \-
 
 ## Create entry for a code
 
 ```shell
-curl --request POST "https://api.invopop.dev/sequence/:owner_id/code/:code_id/entry" \
-  -H "Authorization: Bearer your.api.key" \
+curl --request POST "https://api.invopop.dev/sequence/code/:code_id/entry" \
+  -H "Authorization: Bearer <API_KEY>" \
   -H "Content-Type: application/json" \
   -d '{
         "id": "175ec7e5-8c14-46fd-90ff-ccb37d71550c",
@@ -279,43 +221,23 @@ curl --request POST "https://api.invopop.dev/sequence/:owner_id/code/:code_id/en
 
 ```go
 import (
-    "bytes"
-    "encoding/json"
-    "net/http"
+	sequence "github.com/invopop/client/sequence"
 )
 
-type Entry struct {
-	ID     string            `json:"id"`
-	Value  string            `json:"value"`
-	Meta   map[string]string `json:"meta,omitempty"`
-	PrevID string            `json:"prev_id,omitempty"`
-}
-
-newEntry := Entry{
+codeID := "fb3ad823-65fe-4a15-beff-7dfb186c7b29"
+newEntry := &sequence.EntryParameters{
     ID: "175ec7e5-8c14-46fd-90ff-ccb37d71550c"
     Meta: map[string]string{
         "key": "value",
     }
 }
-newEntryBytes, encodingError := json.Marshall(newEntry)
-if encodingError != nil {
-    // Deal with possible encoding errors
-}
 
-httpClient := &http.Client{}
-data := bytes.NewBuffer(newEntryBytes)
-req, _ := http.NewRequest("POST", "https://api.invopop.dev/sequence/:owner_id/code/:code_id/entry", data)
-req.Header.Set("Authorization", "Bearer your.api.token")
-req.Header.Set("Content-Type", "application/json")
+client := sequence.New("https://api.invopop.dev", "<API_KEY>")
 
-res, err := client.Do(req)
+entry, err := client.CreateEntry(newEntry)
 if err != nil {
-    // Deal with possible network errors here...
+    // Deal with possible client error here...
 }
-
-
-var entry Entry
-decodingErr := json.NewDecoder(res.Body).decode(&entry)
 ```
 
 > Response
@@ -330,18 +252,16 @@ decodingErr := json.NewDecoder(res.Body).decode(&entry)
 }
 ```
 
-
 Creates a new entry object, following the properties and sequence of the specified code.
 
 ### HTTP Request
 
-`POST /sequence/:owner_id/code/:code_id/entry`
+`POST /sequence/code/:code_id/entry`
 
 ### Parameters
 
 Parameter    | Type    | Description
 ------------ | ------- | -----------
-owner_id     | path    | UUID of the company that created the code
 code_id      | path    | UUID that identifies the code
 id           | body    | UUID that will identify the entry
 meta         | body    | Metadata object
@@ -349,35 +269,23 @@ meta         | body    | Metadata object
 ## Retrieve entry for a code
 
 ```shell
-curl "https://api.invopop.dev/sequence/:owner_id/code/:code_id/entry" \
-  -H "Authorization: Bearer your.api.key"
+curl "https://api.invopop.dev/sequence/code/:code_id/entry" \
+  -H "Authorization: Bearer <API_KEY>"
 ```
 
 ```go
 import (
-    "bytes"
-    "encoding/json"
-    "net/http"
+	sequence "github.com/invopop/client/sequence"
 )
 
-type Entry struct {
-	ID     string            `json:"id"`
-	Value  string            `json:"value"`
-	Meta   map[string]string `json:"meta,omitempty"`
-	PrevID string            `json:"prev_id,omitempty"`
-}
+codeID := "fb3ad823-65fe-4a15-beff-7dfb186c7b29"
+entryID := "175ec7e5-8c14-46fd-90ff-ccb37d71550c"
+client := sequence.New("https://api.invopop.dev", "<API_KEY>")
 
-httpClient := &http.Client{}
-req, _ := http.NewRequest("GET", "https://api.invopop.dev/sequence/:owner_id/code/:code_id/entry/:entry_id", nil)
-req.Header.Set("Authorization", "Bearer your.api.token")
-
-res, err := client.Do(req)
+entry, err := client.FetchEntry(codeID, entryID)
 if err != nil {
-    // Deal with possible network errors here...
+    // Deal with possible client error here...
 }
-
-var entry Entry
-decodingErr := json.NewDecoder(res.Body).decode(&entry)
 ```
 
 > Response
@@ -396,13 +304,12 @@ Retrieves a specific entry object using the given UUID.
 
 ### HTTP Request
 
-`GET /sequence/:owner_id/code/:code_id/entry/:entry_id`
+`GET /sequence/code/:code_id/entry/:entry_id`
 
 ### Parameters
 
 Parameter    | Type    | Description
 ------------ | ------- | -----------
-owner_id     | path    | UUID of the company that created the codes
 code_id      | path    | UUID that identifies the code
 entry_id     | path    | UUID that identifies the entry
 
@@ -410,39 +317,22 @@ entry_id     | path    | UUID that identifies the entry
 ## Retrive code's entries
 
 ```shell
-curl "https://api.invopop.dev/sequence/:owner_id/code/:code_id/entries" \
-  -H "Authorization: Bearer your.api.key"
+curl "https://api.invopop.dev/sequence/code/:code_id/entries" \
+  -H "Authorization: Bearer <API_KEY>"
 ```
 
 ```go
 import (
-    "bytes"
-    "encoding/json"
-    "net/http"
+	sequence "github.com/invopop/client/sequence"
 )
 
-type Entry struct {
-	ID     string            `json:"id"`
-	Value  string            `json:"value"`
-	Meta   map[string]string `json:"meta,omitempty"`
-	PrevID string            `json:"prev_id,omitempty"`
-}
+codeID := "fb3ad823-65fe-4a15-beff-7dfb186c7b29"
+client := sequence.New("https://api.invopop.dev", "<API_KEY>")
 
-type EntryCollection struct {
-	Entries []*Entry `json:"entries"`
-}
-
-httpClient := &http.Client{}
-req, _ := http.NewRequest("GET", "https://api.invopop.dev/sequence/:owner_id/code/:code_id/entries", nil)
-req.Header.Set("Authorization", "Bearer your.api.token")
-
-res, err := client.Do(req)
+entry, err := client.FetchEntryCollection(codeID)
 if err != nil {
-    // Deal with possible network errors here...
+    // Deal with possible client error here...
 }
-
-var es EntryCollection
-decodingErr := json.NewDecoder(res.Body).decode(&es)
 ```
 
 > Response
@@ -466,11 +356,10 @@ Retrieves all the entries objects belonging to the specified code.
 
 ### HTTP Request
 
-`GET /sequence/:owner_id/code/:code_id/entries`
+`GET /sequence/code/:code_id/entries`
 
 ### Parameters
 
 Parameter    | Type    | Description
 ------------ | ------- | -----------
-owner_id     | path    | UUID of the company that created the codes
 code_id      | path    | UUID that identifies the code
