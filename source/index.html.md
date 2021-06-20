@@ -6,7 +6,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - go
 
 toc_footers:
-  - <a href='https://access.invopop.dev/'>Sign Up for a Developer Key</a>
+  - <a href='https://access.invopop.dev/'>Get a free developer key →</a>
 
 includes:
   - errors
